@@ -1,10 +1,11 @@
 const puppeteer = require('puppeteer')
+const UserAgent = require('user-agents');
 
-module.exports.launchBrowser = (debug = false) => {
+module.exports.launchBrowser = (debug = false, headless=false) => {
   return new Promise(async (resolve, reject) => {
     try {
       const browser = await puppeteer.launch({
-        // headless: true,
+        headless: headless,
         // executablePath: 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe',   // Use Windows Browser
         // slowMo: 10,              // Slow down the browser
         // timeout: 0,              // Disable timeout
@@ -39,6 +40,22 @@ module.exports.launchBrowser = (debug = false) => {
   });
 }
 
+/**
+ * Close the Puppeteer browser instance
+ * @param {object} browser - Puppeteer Browser Instance
+ * @return {Promise<boolean>} Resolves to true when the browser is closed
+ */
+module.exports.closeBrowser = (browser) => new Promise(async (resolve, reject) => {
+  try {
+    if (browser) await browser.close();
+    resolve(true);
+  } catch (error) {
+    console.log(`closeBrowser Error: ${error}`);
+    reject(error);
+  }
+});
+
+
 module.exports.launchPage = (browser, blockResources = false) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -49,7 +66,7 @@ module.exports.launchPage = (browser, blockResources = false) => {
       // await page.setViewport({ width: 1366, height: 768 });
 
       // Set user agent for page.
-      const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36';
+      const userAgent = new UserAgent().toString();
       await page.setUserAgent(userAgent);
 
       // Pass the Webdriver Test.
@@ -265,3 +282,33 @@ module.exports.getAttrMultiple = (selector, attribute, page) => new Promise(asyn
     reject(error);
   }
 });
+
+/**
+* Auto-scroll function for scrolling a page to load additional content
+* @param {object} page - Puppeteer Page Instance
+* @param {number} distance - Scroll distance in pixels
+* @param {number} interval - Interval in milliseconds between scroll steps
+* @return {Promise<void>} Resolves when scrolling is complete
+*/
+module.exports.autoScroll = async (page, distance = 250, interval = 500) => {
+ await page.evaluate(async (distance, interval) => {
+   await new Promise((resolve) => {
+     let page = 1;
+     let totalHeight = 0;
+
+     const timer = setInterval(() => {
+       console.log(`${page} - Scrolling...`);
+       page++;
+
+       const scrollHeight = document.body.scrollHeight;
+       window.scrollBy(0, distance);
+       totalHeight += distance;
+
+       if (totalHeight >= scrollHeight) {
+         clearInterval(timer);
+         resolve();
+       }
+     }, interval);
+   });
+ }, distance, interval);
+};
