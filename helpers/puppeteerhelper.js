@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer')
+const puppeteer = require('puppeteer');
 const UserAgent = require('user-agents');
 
 module.exports.launchBrowser = (debug = false, headless=false) => {
@@ -122,7 +122,7 @@ module.exports.launchPage = (browser, blockResources = false) => {
         // Set Request Interception to avoid receiving images, fonts and stylesheets for fast speed
         await page.setRequestInterception(true);
         page.on('request', (req) => {
-          const requestUrl = req._url.split('?')[0].split('#')[0];
+          const requestUrl = (req.url()).split('?')[0].split('#')[0];
           if (
             blockedResources.includes(req.resourceType()) ||
             skippedResources.some(resource => requestUrl.includes(resource))
