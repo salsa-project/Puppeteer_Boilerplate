@@ -1,7 +1,7 @@
 /*===============================
         MODULES & Configs
 ================================*/
-import fs from 'fs';
+const fs = require('fs');
 
 
 
@@ -461,4 +461,4 @@ async function checkConnection() {
     process.exit(1); // Exit with failure status code
 }
 
-export { fs_handler, ValueWatcher, createLinkDictionary, checkConnection, checkDuplicates, getMinMaxMid, getFuncDuration, progress, showInfiniteLoadingBar, logWithColor };
+module.exports = { fs_handler, ValueWatcher, createLinkDictionary, checkConnection, checkDuplicates, getMinMaxMid, getFuncDuration, progress, showInfiniteLoadingBar, logWithColor };

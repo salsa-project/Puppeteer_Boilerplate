@@ -1,14 +1,19 @@
 const puppeteer = require('puppeteer');
 const UserAgent = require('user-agents');
 
+const puppeteerExtra = require('puppeteer-extra');
+const Stealth = require('puppeteer-extra-plugin-stealth');
+
+puppeteerExtra.use(Stealth());
+
 module.exports.launchBrowser = (debug = false, headless=false) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const browser = await puppeteer.launch({
+      const browser = await puppeteerExtra.launch({
         headless: headless,
-        // executablePath: 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe',   // Use Windows Browser
-        // slowMo: 10,              // Slow down the browser
-        // timeout: 0,              // Disable timeout
+         executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',   // Use Windows Browser
+         //slowMo: 10,              // Slow down the browser
+         timeout: 0,              // Disable timeout
         // defaultViewport: null,
         // userDataDir: './temp',
         ignoreHTTPSErrors: true,
