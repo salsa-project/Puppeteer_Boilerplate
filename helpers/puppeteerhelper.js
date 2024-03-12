@@ -11,7 +11,8 @@ module.exports.launchBrowser = (debug = false, headless=false) => {
     try {
       const browser = await puppeteerExtra.launch({
         headless: headless,
-         executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',   // Use Windows Browser
+         //executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',   // Use Windows chrome Browser
+         executablePath: 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',   // Use Windows edge Browser
          //slowMo: 10,              // Slow down the browser
          timeout: 0,              // Disable timeout
         // defaultViewport: null,
