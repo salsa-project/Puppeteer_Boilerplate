@@ -28,8 +28,6 @@ async function mainPosts(page) {
     // #1: getting H1
     try {
         if (!isCitiesLinkScrapred) {
-            return; // Exit the first try block and skip to the second try block
-
             await page.goto(siteLink, { waitUntil: 'domcontentloaded', timeout: 0 });
             await page.waitForSelector('h1');
 
